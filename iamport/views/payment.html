@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- jQuery -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <!-- iamport.payment.js -->
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.8.js"></script>
+</head>
+<script>
+    const IMP = window.IMP;
+    IMP.init("");
+
+    const make_merchant_uid = () => {
+        const time = new Date('');
+        const year = time.getFullYear().toString();
+        const month = (time.getMonth()+1).toString;
+        const day = time.getDate().toString();
+        const hour = time.getHours().toString();
+        const minute = time.getMinutes().toString();
+        const second = time.getSeconds().toString();
+        console.log(month, day, hour, minute, second)
+
+        const fixed = (date, length) => {
+            let result = [date]
+            if (date.length < length) {
+                for( let i=0; i<(length-date.length); i++) {
+                    result.push('0')
+                }
+                return result.reverse()
+            }
+        }
+        console.log(fixed('7',2),'===')
+        const merchant_uid = year + month + day + hour + minute + second
+    }
+    make_merchant_uid()
+    function requestPay() {
+        // IMP.request_pay(param, callback) 결제창 호출
+        IMP.request_pay({ // param
+            pg: "html5_inicis",
+            pay_method: "card",
+            merchant_uid: "ORD20180131-0000011",
+            name: "노르웨이 회전 의자",
+            amount: 64900,
+            buyer_email: "gildong@gmail.com",
+            buyer_name: "홍길동",
+            buyer_tel: "010-4242-4242",
+            buyer_addr: "서울특별시 강남구 신사동",
+            buyer_postcode: "01181"
+        }, function (rsp) { // callback
+            if (rsp.success) {
+                console.log('pay success')
+                // 결제 성공 시 로직,
+            } else {
+                console.log('pay fail')
+                // 결제 실패 시 로직,
+            }
+        });
+    }
+</script>
+
+<body>
+    <button onclick="requestPay()">결제하기</button>
+</body>
+
+</html>
